@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up - DVARY GAMES</title>
+    
+    <script type="importmap">
+        {
+            "imports": {
+                "firebase/app": "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js",
+                "firebase/analytics": "https://www.gstatic.com/firebasejs/10.7.0/firebase-analytics.js",
+                "firebase/auth": "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js",
+                "firebase/firestore": "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js",
+                "firebase/storage": "https://www.gstatic.com/firebasejs/10.7.0/firebase-storage.js"
+            }
+        }
+    </script>
+    
+    <link rel="stylesheet" href="../css/signup.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+    <!-- ============================================
+    FIREBASE INITIALIZATION
+    ============================================ -->
+    <script type="module">
+        // ============================================
+        // IMPORT FIREBASE SDKs
+        // ============================================
+        import { initializeApp } from "firebase/app";
+        import { getAnalytics } from "firebase/analytics";
+        import { getAuth } from "firebase/auth";
+        import { getFirestore } from "firebase/firestore";
+        import { getStorage } from "firebase/storage";
+
+        // ============================================
+        // FIREBASE CONFIGURATION
+        // ============================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyCmwASW4XXQ3O0AvsCM_r1WLlrUmGjYVxI",
+            authDomain: "dvary-9a7d0.firebaseapp.com",
+            projectId: "dvary-9a7d0",
+            storageBucket: "dvary-9a7d0.firebasestorage.app",
+            messagingSenderId: "107370806066",
+            appId: "1:107370806066:web:4c2ce1e6f7b6c32909f52b",
+            measurementId: "G-07361LFJEP"
+        };
+
+        // ============================================
+        // INITIALIZE FIREBASE
+        // ============================================
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        console.log('🔥 Firebase initialized in signup.html!');
+
+        window.__firebase = { app, analytics, auth, db, storage };
+    </script>
+
+    <!-- ============================================
+    SIGNUP PAGE
+    ============================================ -->
+    <div class="auth-page signup-page">
+        <a href="index.html" class="auth-back-btn">
+            <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
+        
+        <div class="auth-card signup-card">
+            <div class="auth-logo">
+                <i class="fas fa-gamepad"></i>
+                <span>DVARY</span> GAMES
+            </div>
+            
+            <h1 class="auth-title">Create Account</h1>
+            <p class="auth-subtitle">Join the DVARY GAMES community today!</p>
+            
+            <form id="signupForm" class="auth-form" autocomplete="off">
+                <!-- Full Name -->
+                <div class="form-group">
+                    <label for="fullName"><i class="fas fa-user"></i> Full Name</label>
+                    <input type="text" id="fullName" placeholder="Enter your full name" required />
+                    <div class="form-error" id="fullNameError"></div>
+                </div>
+                
+                <!-- Username -->
+                <div class="form-group">
+                    <label for="username"><i class="fas fa-at"></i> Username</label>
+                    <input type="text" id="username" placeholder="Choose a unique username" required />
+                    <div class="form-error" id="usernameError"></div>
+                    <small class="form-hint">3-20 characters, letters, numbers, underscore only</small>
+                </div>
+                
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="email"><i class="fas fa-envelope"></i> Email Address</label>
+                    <input type="email" id="email" placeholder="Enter your email" required />
+                    <div class="form-error" id="emailError"></div>
+                </div>
+                
+                <!-- Phone -->
+                <div class="form-group">
+                    <label for="phoneNumber"><i class="fas fa-phone"></i> Phone Number (Optional)</label>
+                    <input type="tel" id="phoneNumber" placeholder="Enter your phone number" />
+                </div>
+                
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="password"><i class="fas fa-lock"></i> Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="password" placeholder="Create a strong password" required />
+                        <button type="button" class="toggle-password" id="togglePassword">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="form-error" id="passwordError"></div>
+                    <small class="form-hint">Must be at least 6 characters</small>
+                </div>
+                
+                <!-- Confirm Password -->
+                <div class="form-group">
+                    <label for="confirmPassword"><i class="fas fa-lock"></i> Confirm Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="confirmPassword" placeholder="Confirm your password" required />
+                        <button type="button" class="toggle-password" id="toggleConfirmPassword">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="form-error" id="confirmPasswordError"></div>
+                </div>
+                
+                <!-- Terms -->
+                <div class="form-group terms-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="termsCheckbox" required />
+                        <span class="checkmark"></span>
+                        I agree to the <a href="#" class="terms-link">Terms of Service</a> and <a href="#" class="terms-link">Privacy Policy</a>
+                    </label>
+                    <div class="form-error" id="termsError"></div>
+                </div>
+                
+                <button type="submit" class="btn-primary auth-btn" id="signupBtn">
+                    <i class="fas fa-user-plus"></i> Create Account
+                </button>
+                
+                <div class="auth-loading" id="authLoading" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Creating your account...</p>
+                </div>
+                
+                <div class="auth-success" id="authSuccess" style="display: none;"></div>
+                <div class="auth-error" id="authError" style="display: none;"></div>
+                
+                <div class="auth-divider"><span>or</span></div>
+                
+                <div class="auth-footer">
+                    <p>Already have an account? <a href="login.html" class="auth-link">Login</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============================================
+    AUTH.JS
+    ============================================ -->
+    <script type="module" src="../js/auth.js"></script>
+
+</body>
+</html>
