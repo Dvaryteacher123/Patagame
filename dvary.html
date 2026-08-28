@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>DVARY GAMES - Admin Dashboard</title>
+    
+    <!-- Import Firebase SDKs -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getStorage } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCmwASW4XXQ3O0AvsCM_r1WLlrUmGjYVxI",
+            authDomain: "dvary-9a7d0.firebaseapp.com",
+            projectId: "dvary-9a7d0",
+            storageBucket: "dvary-9a7d0.firebasestorage.app",
+            messagingSenderId: "107370806066",
+            appId: "1:107370806066:web:4c2ce1e6f7b6c32909f52b",
+            measurementId: "G-07361LFJEP"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        // Make Firebase available globally
+        window.auth = auth;
+        window.db = db;
+        window.storage = storage;
+
+        console.log('✅ Firebase initialized for Admin Dashboard');
+    </script>
+
+    <link rel="stylesheet" href="dvary.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div class="sidebar-brand">
+                <span class="brand-icon">🎮</span>
+                <span class="brand-name">DVARY</span>
+                <span class="brand-badge">ADMIN</span>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-section="dashboard">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </button>
+                <button class="nav-item" data-section="games">
+                    <i class="fas fa-gamepad"></i>
+                    <span>Games</span>
+                </button>
+                <button class="nav-item" data-section="users">
+                    <i class="fas fa-users"></i>
+                    <span>Users</span>
+                </button>
+                <button class="nav-item" data-section="notifications">
+                    <i class="fas fa-bell"></i>
+                    <span>Notifications</span>
+                </button>
+                <button class="nav-item" data-section="reports">
+                    <i class="fas fa-flag"></i>
+                    <span>Reports</span>
+                </button>
+                <button class="nav-item" data-section="moderation">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Chat Moderation</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="nav-item" id="backToSiteBtn">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back to Site</span>
+                </button>
+                <button class="nav-item" id="adminLogoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Top Bar -->
+            <header class="admin-topbar">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 id="pageTitle">Dashboard</h1>
+                <div class="topbar-right">
+                    <span class="admin-user" id="adminUser">Admin</span>
+                    <div class="admin-avatar" id="adminAvatar">
+                        <img src="https://ui-avatars.com/api/?name=Admin&background=7c3aed&color=fff&size=64" alt="Admin" />
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Section -->
+            <section id="section-dashboard" class="admin-section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon purple">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="totalUsers">0</span>
+                            <span class="stat-label">Total Users</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon blue">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="totalGames">0</span>
+                            <span class="stat-label">Total Games</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">
+                            <i class="fas fa-gift"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="freeGames">0</span>
+                            <span class="stat-label">Free Games</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon gold">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="vipGames">0</span>
+                            <span class="stat-label">VIP Games</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">
+                            <i class="fas fa-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="onlineUsers">0</span>
+                            <span class="stat-label">Online Users</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon red">
+                            <i class="fas fa-flag"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="totalReports">0</span>
+                            <span class="stat-label">Reports</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon yellow">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="totalNotifications">0</span>
+                            <span class="stat-label">Notifications</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="recent-section">
+                    <h3><i class="fas fa-clock"></i> Recent Activity</h3>
+                    <div class="activity-list" id="recentActivity">
+                        <div class="loading-state">Loading activity...</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Games Section -->
+            <section id="section-games" class="admin-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-gamepad"></i> Games Management</h2>
+                    <button class="add-btn" id="addGameBtn">
+                        <i class="fas fa-plus"></i> Add Game
+                    </button>
+                </div>
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchGames" placeholder="Search games..." />
+                </div>
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Type</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gamesTableBody">
+                            <tr><td colspan="5" class="loading-state">Loading games...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Users Section -->
+            <section id="section-users" class="admin-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-users"></i> Users Management</h2>
+                </div>
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchUsers" placeholder="Search users..." />
+                </div>
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Avatar</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <tr><td colspan="5" class="loading-state">Loading users...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Notifications Section -->
+            <section id="section-notifications" class="admin-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-bell"></i> Notifications</h2>
+                    <button class="add-btn" id="addNotificationBtn">
+                        <i class="fas fa-plus"></i> Create Notification
+                    </button>
+                </div>
+                <div class="notifications-list" id="notificationsList">
+                    <div class="loading-state">Loading notifications...</div>
+                </div>
+            </section>
+
+            <!-- Reports Section -->
+            <section id="section-reports" class="admin-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-flag"></i> Reports</h2>
+                </div>
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Reported User</th>
+                                <th>Reported By</th>
+                                <th>Reason</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportsTableBody">
+                            <tr><td colspan="5" class="loading-state">Loading reports...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Chat Moderation Section -->
+            <section id="section-moderation" class="admin-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-shield-alt"></i> Chat Moderation</h2>
+                </div>
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Message</th>
+                                <th>User</th>
+                                <th>Time</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="moderationTableBody">
+                            <tr><td colspan="4" class="loading-state">Loading messages...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Add Game Modal -->
+    <div class="modal" id="addGameModal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3><i class="fas fa-plus"></i> Add New Game</h3>
+                <button class="modal-close" id="closeGameModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addGameForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="gameName">Game Name *</label>
+                            <input type="text" id="gameName" placeholder="Enter game name" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="gameCategory">Category *</label>
+                            <input type="text" id="gameCategory" placeholder="e.g., Action, RPG" required />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="gameGenre">Genre</label>
+                            <input type="text" id="gameGenre" placeholder="e.g., FPS, Adventure" />
+                        </div>
+                        <div class="form-group">
+                            <label for="gameVersion">Version</label>
+                            <input type="text" id="gameVersion" placeholder="e.g., 1.0.0" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="gameSize">Size</label>
+                            <input type="text" id="gameSize" placeholder="e.g., 500MB" />
+                        </div>
+                        <div class="form-group">
+                            <label for="gameType">Type *</label>
+                            <select id="gameType" required>
+                                <option value="free">Free</option>
+                                <option value="vip">VIP</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="gameDescription">Description *</label>
+                        <textarea id="gameDescription" rows="3" placeholder="Enter game description" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="gameImage">Cover Image</label>
+                        <input type="file" id="gameImage" accept="image/*" />
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="gameDownloadUrl">Download URL</label>
+                            <input type="url" id="gameDownloadUrl" placeholder="https://example.com/download" />
+                        </div>
+                        <div class="form-group">
+                            <label for="gameTrailerUrl">Trailer URL</label>
+                            <input type="url" id="gameTrailerUrl" placeholder="https://youtube.com/watch?v=..." />
+                        </div>
+                    </div>
+                    <div class="form-row checkboxes">
+                        <div class="form-group checkbox-group">
+                            <label>
+                                <input type="checkbox" id="gameFeatured" /> Featured
+                            </label>
+                        </div>
+                        <div class="form-group checkbox-group">
+                            <label>
+                                <input type="checkbox" id="gameTrending" /> Trending
+                            </label>
+                        </div>
+                    </div>
+                    <div id="gameError" class="error-message" style="display:none;"></div>
+                    <button type="submit" class="save-btn">Add Game</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Game Modal -->
+    <div class="modal" id="editGameModal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> Edit Game</h3>
+                <button class="modal-close" id="closeEditGameModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editGameForm">
+                    <input type="hidden" id="editGameId" />
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editGameName">Game Name *</label>
+                            <input type="text" id="editGameName" placeholder="Enter game name" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="editGameCategory">Category *</label>
+                            <input type="text" id="editGameCategory" placeholder="e.g., Action, RPG" required />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editGameGenre">Genre</label>
+                            <input type="text" id="editGameGenre" placeholder="e.g., FPS, Adventure" />
+                        </div>
+                        <div class="form-group">
+                            <label for="editGameVersion">Version</label>
+                            <input type="text" id="editGameVersion" placeholder="e.g., 1.0.0" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editGameSize">Size</label>
+                            <input type="text" id="editGameSize" placeholder="e.g., 500MB" />
+                        </div>
+                        <div class="form-group">
+                            <label for="editGameType">Type *</label>
+                            <select id="editGameType" required>
+                                <option value="free">Free</option>
+                                <option value="vip">VIP</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="editGameDescription">Description *</label>
+                        <textarea id="editGameDescription" rows="3" placeholder="Enter game description" required></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editGameDownloadUrl">Download URL</label>
+                            <input type="url" id="editGameDownloadUrl" placeholder="https://example.com/download" />
+                        </div>
+                        <div class="form-group">
+                            <label for="editGameTrailerUrl">Trailer URL</label>
+                            <input type="url" id="editGameTrailerUrl" placeholder="https://youtube.com/watch?v=..." />
+                        </div>
+                    </div>
+                    <div class="form-row checkboxes">
+                        <div class="form-group checkbox-group">
+                            <label>
+                                <input type="checkbox" id="editGameFeatured" /> Featured
+                            </label>
+                        </div>
+                        <div class="form-group checkbox-group">
+                            <label>
+                                <input type="checkbox" id="editGameTrending" /> Trending
+                            </label>
+                        </div>
+                    </div>
+                    <div id="editGameError" class="error-message" style="display:none;"></div>
+                    <button type="submit" class="save-btn">Update Game</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Notification Modal -->
+    <div class="modal" id="addNotificationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-bell"></i> Create Notification</h3>
+                <button class="modal-close" id="closeNotifModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addNotificationForm">
+                    <div class="form-group">
+                        <label for="notifTitle">Title *</label>
+                        <input type="text" id="notifTitle" placeholder="Enter notification title" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="notifMessage">Message *</label>
+                        <textarea id="notifMessage" rows="3" placeholder="Enter notification message" required></textarea>
+                    </div>
+                    <div id="notifError" class="error-message" style="display:none;"></div>
+                    <button type="submit" class="save-btn">Create Notification</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal" id="deleteConfirmModal">
+        <div class="modal-content modal-danger">
+            <div class="modal-header">
+                <h3 style="color:#ef4444;"><i class="fas fa-exclamation-triangle"></i> Confirm Delete</h3>
+                <button class="modal-close" id="closeDeleteConfirm">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="danger-text">Are you sure you want to delete this item? This action cannot be undone.</p>
+                <button class="delete-btn" id="confirmDeleteBtn">Delete</button>
+                <button class="cancel-btn" id="cancelDeleteBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+              </html>
