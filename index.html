@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dvary App</title>
+    
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js">
+    </script>
+    <!-- Firebase Analytics (optional) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics-compat.js">
+    </script>
+
+    <style>
+        /* Mtindo wa msingi */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            padding: 2rem 3rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        p {
+            color: #555;
+            margin: 0.5rem 0 1.5rem;
+            line-height: 1.6;
+        }
+
+        .status {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+
+        .firebase-badge {
+            display: inline-block;
+            background: #ffca28;
+            color: #333;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <span class="firebase-badge">🔥 Firebase</span>
+        <h1>Karibu Dvary</h1>
+        <p>Mfumo umeunganishwa na Firebase.<br /> 
+        Angalia console ya kivinjari kwa uthibitisho.</p>
+
+        <div id="app-status" class="status">✓ Firebase imeanzishwa</div>
+    </div>
+
+    <script>
+        // ------------------------------------------------------------
+        // SANIDI YA FIREBASE (kwa kutumia compat SDK)
+        // ------------------------------------------------------------
+        const firebaseConfig = {
+            apiKey: "AIzaSyCmwASW4XXQ3O0AvsCM_r1WLlrUmGjYVxI",
+            authDomain: "dvary-9a7d0.firebaseapp.com",
+            projectId: "dvary-9a7d0",
+            storageBucket: "dvary-9a7d0.firebasestorage.app",
+            messagingSenderId: "107370806066",
+            appId: "1:107370806066:web:4c2ce1e6f7b6c32909f52b",
+            measurementId: "G-07361LFJEP"
+        };
+
+        // Anzisha Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Anzisha Analytics (ikiwa inapatikana)
+        try {
+            firebase.analytics();
+            console.log("✅ Firebase Analytics imeanzishwa.");
+        } catch (e) {
+            console.warn("⚠️ Analytics haikuanza:", e.message);
+        }
+
+        console.log("✅ Firebase imeunganishwa kikamilifu!");
+        console.log("📦 Project ID:", firebaseConfig.projectId);
+
+        // Tunaweza kuongeza hali ya ziada hapa
+        const statusDiv = document.getElementById('app-status');
+        statusDiv.textContent = "✅ Firebase imeanzishwa na iko tayari!";
+        statusDiv.style.background = "#c8e6c9";
+    </script>
+
+</body>
+</html>
