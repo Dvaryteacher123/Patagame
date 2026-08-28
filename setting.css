@@ -1,0 +1,805 @@
+/* ============================================
+   DVARY GAMES - Settings Page Styles
+   ============================================ */
+
+/* Reset & Base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    background: #0a0a0f;
+    color: #ffffff;
+    min-height: 100vh;
+    background-image: 
+        radial-gradient(ellipse at 10% 20%, rgba(124, 58, 237, 0.05) 0%, transparent 50%);
+}
+
+/* ============================================
+   SETTINGS CONTAINER
+   ============================================ */
+.settings-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 16px 16px 80px;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+.settings-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0 20px;
+    border-bottom: 1px solid rgba(124, 58, 237, 0.08);
+    margin-bottom: 24px;
+}
+
+.back-btn {
+    background: none;
+    border: none;
+    color: #9ca3af;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 6px;
+    transition: color 0.3s ease;
+}
+
+.back-btn:hover {
+    color: #7c3aed;
+}
+
+.settings-header h1 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.header-spacer {
+    width: 32px;
+}
+
+/* ============================================
+   PROFILE SECTION
+   ============================================ */
+.profile-section {
+    margin-bottom: 28px;
+}
+
+.profile-card {
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid rgba(124, 58, 237, 0.08);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.profile-avatar-wrapper {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid rgba(124, 58, 237, 0.3);
+}
+
+.profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.change-photo-btn {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(135deg, #7c3aed, #6d28d9);
+    border: none;
+    color: #fff;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.change-photo-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4);
+}
+
+.profile-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.profile-info h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+.profile-info p {
+    font-size: 14px;
+    color: #9ca3af;
+    margin-bottom: 2px;
+}
+
+.profile-info p:last-child {
+    margin-bottom: 0;
+}
+
+/* ============================================
+   SETTINGS OPTIONS
+   ============================================ */
+.settings-options {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.setting-group {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 14px;
+    border: 1px solid rgba(124, 58, 237, 0.06);
+    overflow: hidden;
+}
+
+.setting-group h3 {
+    font-size: 13px;
+    font-weight: 600;
+    color: #7c3aed;
+    padding: 14px 18px 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.setting-group h3 i {
+    font-size: 14px;
+}
+
+.setting-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 18px;
+    background: none;
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    color: #d1d5db;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+    text-align: left;
+}
+
+.setting-item:hover {
+    background: rgba(124, 58, 237, 0.06);
+}
+
+.setting-item:active {
+    transform: scale(0.98);
+}
+
+.setting-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: rgba(124, 58, 237, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.setting-icon i {
+    font-size: 16px;
+    color: #7c3aed;
+}
+
+.setting-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.setting-title {
+    font-size: 14px;
+    font-weight: 500;
+    display: block;
+    color: #f3f4f6;
+}
+
+.setting-desc {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.setting-item i.fa-chevron-right {
+    color: #4b5563;
+    font-size: 14px;
+}
+
+/* ============================================
+   TOGGLE SWITCH
+   ============================================ */
+.toggle-switch {
+    width: 44px;
+    height: 24px;
+    background: #374151;
+    border-radius: 12px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.toggle-switch.active {
+    background: linear-gradient(135deg, #7c3aed, #6d28d9);
+}
+
+.toggle-switch .toggle-slider {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-switch.active .toggle-slider {
+    left: 22px;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+.settings-footer {
+    text-align: center;
+    margin-top: 32px;
+    color: #4b5563;
+    font-size: 13px;
+    padding: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.settings-footer .version {
+    font-size: 12px;
+    color: #374151;
+    margin-top: 4px;
+}
+
+/* ============================================
+   MODALS
+   ============================================ */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal.active {
+    display: flex;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-content {
+    background: #1a1a2e;
+    border-radius: 16px;
+    max-width: 480px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    border: 1px solid rgba(124, 58, 237, 0.12);
+    animation: slideUp 0.3s ease;
+}
+
+/* Custom scrollbar for modals */
+.modal-content::-webkit-scrollbar {
+    width: 4px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background: rgba(124, 58, 237, 0.3);
+    border-radius: 10px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.modal-header h3 {
+    font-size: 17px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+}
+
+.modal-header h3 i {
+    color: #7c3aed;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: #6b7280;
+    font-size: 24px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.modal-close:hover {
+    color: #fff;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+/* ============================================
+   FORM STYLES
+   ============================================ */
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: #d1d5db;
+    margin-bottom: 4px;
+}
+
+.form-group input:not([type="file"]) {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(124, 58, 237, 0.12);
+    border-radius: 10px;
+    padding: 10px 14px;
+    color: #fff;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.form-group input:not([type="file"]):focus {
+    border-color: #7c3aed;
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+}
+
+.form-group input:not([type="file"])::placeholder {
+    color: #6b7280;
+}
+
+/* Password wrapper */
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-wrapper input {
+    padding-right: 44px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #6b7280;
+    cursor: pointer;
+    padding: 6px;
+    transition: color 0.3s ease;
+}
+
+.toggle-password:hover {
+    color: #7c3aed;
+}
+
+/* Error message */
+.error-message {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: #fca5a5;
+    font-size: 13px;
+    margin-bottom: 16px;
+}
+
+.error-message i {
+    color: #ef4444;
+    font-size: 16px;
+}
+
+/* Save button */
+.save-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #7c3aed, #6d28d9);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.save-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(124, 58, 237, 0.3);
+}
+
+.save-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ============================================
+   LANGUAGE OPTIONS
+   ============================================ */
+.language-options {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.language-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: none;
+    border: none;
+    border-radius: 10px;
+    color: #d1d5db;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+    text-align: left;
+}
+
+.language-option:hover {
+    background: rgba(124, 58, 237, 0.06);
+}
+
+.language-option.active {
+    background: rgba(124, 58, 237, 0.12);
+    border: 1px solid rgba(124, 58, 237, 0.2);
+}
+
+.lang-flag {
+    font-size: 24px;
+}
+
+.lang-name {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.lang-check {
+    color: #7c3aed;
+    font-size: 18px;
+}
+
+.language-option.active .lang-check {
+    display: block !important;
+}
+
+/* ============================================
+   DELETE ACCOUNT MODAL
+   ============================================ */
+.modal-danger .modal-header h3 i {
+    color: #ef4444;
+}
+
+.danger-text {
+    color: #9ca3af;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+
+.danger-text strong {
+    color: #ef4444;
+}
+
+.delete-btn {
+    width: 100%;
+    background: #ef4444;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 8px;
+}
+
+.delete-btn:hover {
+    background: #dc2626;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(239, 68, 68, 0.3);
+}
+
+.delete-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.cancel-btn {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.06);
+    color: #9ca3af;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 8px;
+}
+
+.cancel-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+/* Tablets */
+@media (max-width: 768px) {
+    .settings-container {
+        padding: 12px 12px 60px;
+    }
+
+    .profile-card {
+        padding: 18px;
+        gap: 16px;
+    }
+
+    .profile-avatar {
+        width: 70px;
+        height: 70px;
+    }
+
+    .profile-info h2 {
+        font-size: 18px;
+    }
+
+    .modal-content {
+        max-width: 95%;
+        margin: 10px;
+    }
+}
+
+/* Mobile phones */
+@media (max-width: 480px) {
+    .settings-container {
+        padding: 8px 8px 40px;
+    }
+
+    .settings-header {
+        padding: 8px 0 16px;
+        margin-bottom: 16px;
+    }
+
+    .settings-header h1 {
+        font-size: 18px;
+    }
+
+    .profile-card {
+        padding: 14px;
+        gap: 12px;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .profile-avatar {
+        width: 80px;
+        height: 80px;
+    }
+
+    .profile-info h2 {
+        font-size: 18px;
+    }
+
+    .profile-info p {
+        font-size: 13px;
+    }
+
+    .setting-group h3 {
+        font-size: 12px;
+        padding: 12px 14px 6px;
+    }
+
+    .setting-item {
+        padding: 10px 14px;
+        gap: 10px;
+    }
+
+    .setting-icon {
+        width: 32px;
+        height: 32px;
+    }
+
+    .setting-icon i {
+        font-size: 14px;
+    }
+
+    .setting-title {
+        font-size: 13px;
+    }
+
+    .setting-desc {
+        font-size: 11px;
+    }
+
+    .toggle-switch {
+        width: 40px;
+        height: 22px;
+    }
+
+    .toggle-switch .toggle-slider {
+        width: 18px;
+        height: 18px;
+    }
+
+    .toggle-switch.active .toggle-slider {
+        left: 20px;
+    }
+
+    .modal-content {
+        max-width: 100%;
+        margin: 8px;
+        border-radius: 12px;
+    }
+
+    .modal-header {
+        padding: 12px 16px;
+    }
+
+    .modal-header h3 {
+        font-size: 15px;
+    }
+
+    .modal-body {
+        padding: 16px;
+    }
+
+    .form-group input:not([type="file"]) {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+
+    .save-btn {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .language-option {
+        padding: 10px 14px;
+    }
+
+    .lang-flag {
+        font-size: 20px;
+    }
+
+    .lang-name {
+        font-size: 13px;
+    }
+
+    .danger-text {
+        font-size: 13px;
+    }
+
+    .delete-btn,
+    .cancel-btn {
+        padding: 10px;
+        font-size: 14px;
+    }
+}
+
+/* Small phones */
+@media (max-width: 360px) {
+    .profile-avatar {
+        width: 64px;
+        height: 64px;
+    }
+
+    .change-photo-btn {
+        width: 26px;
+        height: 26px;
+        font-size: 12px;
+    }
+
+    .profile-info h2 {
+        font-size: 16px;
+    }
+
+    .profile-info p {
+        font-size: 12px;
+    }
+
+    .setting-item {
+        padding: 8px 12px;
+    }
+
+    .setting-title {
+        font-size: 12px;
+    }
+
+    .modal-header h3 {
+        font-size: 14px;
+    }
+
+    .modal-body {
+        padding: 12px;
+    }
+      }
