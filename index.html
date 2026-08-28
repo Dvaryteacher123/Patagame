@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>DVARY GAMES - Home</title>
+    
+    <!-- Import Firebase SDKs -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics.js";
+        import { getFirestore, collection, getDocs, query, limit, where } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCmwASW4XXQ3O0AvsCM_r1WLlrUmGjYVxI",
+            authDomain: "dvary-9a7d0.firebaseapp.com",
+            projectId: "dvary-9a7d0",
+            storageBucket: "dvary-9a7d0.firebasestorage.app",
+            messagingSenderId: "107370806066",
+            appId: "1:107370806066:web:4c2ce1e6f7b6c32909f52b",
+            measurementId: "G-07361LFJEP"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // Make Firebase available globally
+        window.db = db;
+        window.auth = auth;
+
+        console.log('✅ Firebase initialized successfully');
+    </script>
+
+    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <span class="brand-icon">🎮</span>
+                <span class="brand-name">DVARY GAMES</span>
+            </div>
+
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#games"><i class="fas fa-gamepad"></i> Games</a></li>
+                <li><a href="#vip-games"><i class="fas fa-crown"></i> VIP Games</a></li>
+                <li><a href="#free-games"><i class="fas fa-gift"></i> Free Games</a></li>
+                <li>
+                    <div class="search-container">
+                        <input type="text" id="searchInput" placeholder="Search games..." />
+                        <button id="searchBtn"><i class="fas fa-search"></i></button>
+                    </div>
+                </li>
+                <li><a href="#" id="notificationBtn"><i class="fas fa-bell"></i> <span class="notification-badge" id="notifBadge">0</span></a></li>
+                <li><a href="chat.html"><i class="fas fa-comment-dots"></i> Chat</a></li>
+                <li><a href="#" id="profileLink"><i class="fas fa-user"></i> Profile</a></li>
+                <li><a href="setting.html"><i class="fas fa-cog"></i> Settings</a></li>
+                <li id="adminNav" style="display:none;"><a href="dvary.html"><i class="fas fa-shield-alt"></i> Admin</a></li>
+                <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-section" id="heroSection">
+            <div class="hero-content">
+                <h1 class="hero-title">Welcome to DVARY GAMES</h1>
+                <p class="hero-description">Discover the best games, play with friends, and join the ultimate gaming community.</p>
+                <div class="hero-buttons">
+                    <a href="#games" class="btn-primary">Explore Games</a>
+                    <a href="chat.html" class="btn-secondary">Join Community</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="hero-game-card">
+                    <div class="hero-game-image" id="heroGameImage">
+                        <div class="hero-game-info">
+                            <h3 id="heroGameName">Loading...</h3>
+                            <p id="heroGameCategory">Featured Game</p>
+                            <a href="#" id="heroGameBtn" class="btn-primary">View Game</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Games Grid -->
+        <section class="games-section" id="games">
+            <div class="section-header">
+                <h2><i class="fas fa-fire"></i> Featured Games</h2>
+                <a href="#" class="view-all">View All →</a>
+            </div>
+            <div class="games-grid" id="featuredGames">
+                <div class="loading-spinner">Loading games...</div>
+            </div>
+        </section>
+
+        <section class="games-section" id="vip-games">
+            <div class="section-header">
+                <h2><i class="fas fa-crown"></i> VIP Games</h2>
+                <a href="#" class="view-all">View All →</a>
+            </div>
+            <div class="games-grid" id="vipGames">
+                <div class="loading-spinner">Loading VIP games...</div>
+            </div>
+        </section>
+
+        <section class="games-section" id="free-games">
+            <div class="section-header">
+                <h2><i class="fas fa-gift"></i> Free Games</h2>
+                <a href="#" class="view-all">View All →</a>
+            </div>
+            <div class="games-grid" id="freeGames">
+                <div class="loading-spinner">Loading free games...</div>
+            </div>
+        </section>
+
+        <section class="games-section" id="trending-games">
+            <div class="section-header">
+                <h2><i class="fas fa-chart-line"></i> Trending Games</h2>
+                <a href="#" class="view-all">View All →</a>
+            </div>
+            <div class="games-grid" id="trendingGames">
+                <div class="loading-spinner">Loading trending games...</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <span class="brand-icon">🎮</span>
+                <span class="brand-name">DVARY GAMES</span>
+                <p>Your ultimate gaming destination</p>
+            </div>
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="chat.html">Community</a>
+                <a href="setting.html">Settings</a>
+                <a href="dvary.html">Admin</a>
+            </div>
+            <div class="footer-social">
+                <a href="#"><i class="fab fa-discord"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 DVARY GAMES. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Notification Modal -->
+    <div class="modal" id="notificationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-bell"></i> Notifications</h3>
+                <button class="modal-close" id="closeNotifModal">&times;</button>
+            </div>
+            <div class="modal-body" id="notificationList">
+                <div class="empty-state">No notifications yet</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Modal -->
+    <div class="modal" id="gameModal">
+        <div class="modal-content modal-game">
+            <button class="modal-close" id="closeGameModal">&times;</button>
+            <div class="game-detail" id="gameDetail">
+                <div class="game-detail-image" id="detailImage"></div>
+                <div class="game-detail-info">
+                    <h2 id="detailName">Game Name</h2>
+                    <p class="detail-category" id="detailCategory">Category</p>
+                    <p class="detail-description" id="detailDescription">Description</p>
+                    <div class="detail-meta">
+                        <span><i class="fas fa-tag"></i> <span id="detailType">Free</span></span>
+                        <span><i class="fas fa-code-branch"></i> <span id="detailVersion">1.0.0</span></span>
+                        <span><i class="fas fa-hdd"></i> <span id="detailSize">Unknown</span></span>
+                    </div>
+                    <div class="detail-actions">
+                        <a href="#" id="detailDownload" class="btn-primary"><i class="fas fa-download"></i> Download</a>
+                        <a href="#" id="detailTrailer" class="btn-secondary"><i class="fas fa-play"></i> Trailer</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
