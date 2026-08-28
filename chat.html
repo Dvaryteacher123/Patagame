@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>DVARY GAMES - Community Chat</title>
+    
+    <!-- Import Firebase SDKs -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getStorage } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCmwASW4XXQ3O0AvsCM_r1WLlrUmGjYVxI",
+            authDomain: "dvary-9a7d0.firebaseapp.com",
+            projectId: "dvary-9a7d0",
+            storageBucket: "dvary-9a7d0.firebasestorage.app",
+            messagingSenderId: "107370806066",
+            appId: "1:107370806066:web:4c2ce1e6f7b6c32909f52b",
+            measurementId: "G-07361LFJEP"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        // Make Firebase available globally
+        window.auth = auth;
+        window.db = db;
+        window.storage = storage;
+
+        console.log('✅ Firebase initialized for Chat');
+    </script>
+
+    <link rel="stylesheet" href="chat.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+    <div class="chat-container">
+        <!-- Chat Header -->
+        <header class="chat-header">
+            <div class="header-left">
+                <button class="back-btn" id="backBtn">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div class="header-info">
+                    <div class="header-title">
+                        <span class="chat-icon">💬</span>
+                        <h2>DVARY GAMES COMMUNITY</h2>
+                        <button class="info-btn" id="groupInfoBtn">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                    </div>
+                    <div class="header-stats">
+                        <span class="stat-item">
+                            <i class="fas fa-users"></i>
+                            <span id="memberCount">0</span> Members
+                        </span>
+                        <span class="stat-item online">
+                            <i class="fas fa-circle"></i>
+                            <span id="onlineCount">0</span> Online
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Chat Messages -->
+        <div class="chat-messages" id="chatMessages">
+            <div id="messagesContainer" class="messages-container">
+                <!-- Messages will be rendered here -->
+                <div class="loading-state">
+                    <div class="loading-spinner"></div>
+                    <p>Loading messages...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Typing Indicator -->
+        <div class="typing-indicator" id="typingIndicator" style="display:none;">
+            <div class="typing-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <span id="typingText" class="typing-text">Someone is typing...</span>
+        </div>
+
+        <!-- Message Input -->
+        <div class="chat-input-container">
+            <div class="chat-input-wrapper">
+                <button class="input-btn emoji-btn" id="emojiBtn" title="Emoji">
+                    <i class="fas fa-smile"></i>
+                </button>
+                
+                <button class="input-btn attach-btn" id="attachBtn" title="Attachment">
+                    <i class="fas fa-paperclip"></i>
+                </button>
+                <input type="file" id="fileInput" accept="image/*,video/*,audio/*,application/pdf" style="display:none;" multiple />
+
+                <textarea 
+                    id="messageInput" 
+                    class="message-input" 
+                    placeholder="Andika ujumbe..." 
+                    rows="1"
+                    maxlength="1000"
+                ></textarea>
+
+                <button class="input-btn send-btn" id="sendBtn" title="Send">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Emoji Picker Modal -->
+    <div class="emoji-modal" id="emojiModal" style="display:none;">
+        <div class="emoji-picker">
+            <div class="emoji-header">
+                <h4><i class="fas fa-smile"></i> Emojis</h4>
+                <button class="close-emoji" id="closeEmoji">&times;</button>
+            </div>
+            <div class="emoji-grid" id="emojiGrid">
+                <!-- Emojis will be rendered here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Group Info Modal -->
+    <div class="group-info-modal" id="groupInfoModal" style="display:none;">
+        <div class="group-info-content">
+            <div class="group-info-header">
+                <h3><i class="fas fa-users"></i> Group Info</h3>
+                <button class="close-group-info" id="closeGroupInfo">&times;</button>
+            </div>
+            <div class="group-info-body">
+                <div class="group-detail">
+                    <h4>💬 DVARY GAMES COMMUNITY</h4>
+                    <p class="group-desc">The official gaming community chat for DVARY GAMES</p>
+                </div>
+                <div class="group-stats">
+                    <div class="stat-box">
+                        <span class="stat-number" id="infoMemberCount">0</span>
+                        <span class="stat-label">Total Members</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number online" id="infoOnlineCount">0</span>
+                        <span class="stat-label">Online Now</span>
+                    </div>
+                </div>
+                <div class="members-list">
+                    <h4><i class="fas fa-user-friends"></i> Members List</h4>
+                    <div class="members-search">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="membersSearch" placeholder="Search members..." />
+                    </div>
+                    <div id="membersList" class="members-grid">
+                        <div class="loading-state">Loading members...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Attachment Preview Modal -->
+    <div class="attachment-modal" id="attachmentModal" style="display:none;">
+        <div class="attachment-content">
+            <button class="close-attachment" id="closeAttachment">&times;</button>
+            <div id="attachmentPreview" class="attachment-preview">
+                <div class="attachment-placeholder">
+                    <i class="fas fa-file"></i>
+                    <p>No file selected</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Modal -->
+    <div class="report-modal" id="reportModal" style="display:none;">
+        <div class="report-content">
+            <div class="report-header">
+                <h3><i class="fas fa-flag"></i> Report</h3>
+                <button class="close-report" id="closeReport">&times;</button>
+            </div>
+            <div class="report-body">
+                <p class="report-info">Reporting: <strong id="reportTargetName">User</strong></p>
+                <div class="form-group">
+                    <label for="reportReason">Reason</label>
+                    <select id="reportReason">
+                        <option value="spam">Spam</option>
+                        <option value="harassment">Harassment</option>
+                        <option value="fake_account">Fake Account</option>
+                        <option value="inappropriate">Inappropriate Content</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="reportDetails">Additional Details (optional)</label>
+                    <textarea id="reportDetails" rows="3" placeholder="Provide more details..."></textarea>
+                </div>
+                <button class="report-btn" id="submitReport">
+                    <i class="fas fa-flag"></i> Submit Report
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="chat.js"></script>
+</body>
+</html>
