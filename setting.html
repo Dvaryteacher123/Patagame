@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>DVARY GAMES - Settings</title>
+    
+    <!-- Import Firebase SDKs -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getStorage } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCmwASW4XXQ3O0AvsCM_r1WLlrUmGjYVxI",
+            authDomain: "dvary-9a7d0.firebaseapp.com",
+            projectId: "dvary-9a7d0",
+            storageBucket: "dvary-9a7d0.firebasestorage.app",
+            messagingSenderId: "107370806066",
+            appId: "1:107370806066:web:4c2ce1e6f7b6c32909f52b",
+            measurementId: "G-07361LFJEP"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        // Make Firebase available globally
+        window.auth = auth;
+        window.db = db;
+        window.storage = storage;
+
+        console.log('✅ Firebase initialized for Settings');
+    </script>
+
+    <link rel="stylesheet" href="setting.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+    <div class="settings-container">
+        <!-- Header -->
+        <header class="settings-header">
+            <button class="back-btn" id="backBtn">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <h1>Settings</h1>
+            <div class="header-spacer"></div>
+        </header>
+
+        <!-- Profile Section -->
+        <section class="profile-section">
+            <div class="profile-card">
+                <div class="profile-avatar-wrapper">
+                    <div class="profile-avatar" id="profileAvatar">
+                        <img id="avatarImage" src="https://ui-avatars.com/api/?name=User&background=7c3aed&color=fff&size=128" alt="Profile" />
+                    </div>
+                    <button class="change-photo-btn" id="changePhotoBtn">
+                        <i class="fas fa-camera"></i>
+                    </button>
+                    <input type="file" id="photoInput" accept="image/*" style="display:none;" />
+                </div>
+                <div class="profile-info">
+                    <h2 id="profileName">Loading...</h2>
+                    <p id="profileUsername">@username</p>
+                    <p id="profileEmail">email@example.com</p>
+                    <p id="profilePhone">+255 700 000 000</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Settings Options -->
+        <section class="settings-options">
+            <!-- Edit Profile -->
+            <div class="setting-group">
+                <h3><i class="fas fa-user-edit"></i> Profile Settings</h3>
+                <button class="setting-item" id="editProfileBtn">
+                    <div class="setting-icon">
+                        <i class="fas fa-pen"></i>
+                    </div>
+                    <div class="setting-info">
+                        <span class="setting-title">Edit Profile</span>
+                        <span class="setting-desc">Update your personal information</span>
+                    </div>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+
+            <!-- Appearance -->
+            <div class="setting-group">
+                <h3><i class="fas fa-palette"></i> Appearance</h3>
+                <button class="setting-item" id="darkModeBtn">
+                    <div class="setting-icon">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <div class="setting-info">
+                        <span class="setting-title">Dark Mode</span>
+                        <span class="setting-desc">Toggle dark theme</span>
+                    </div>
+                    <div class="toggle-switch" id="darkModeToggle">
+                        <span class="toggle-slider"></span>
+                    </div>
+                </button>
+                <button class="setting-item" id="lightModeBtn">
+                    <div class="setting-icon">
+                        <i class="fas fa-sun"></i>
+                    </div>
+                    <div class="setting-info">
+                        <span class="setting-title">Light Mode</span>
+                        <span class="setting-desc">Toggle light theme</span>
+                    </div>
+                    <div class="toggle-switch" id="lightModeToggle">
+                        <span class="toggle-slider"></span>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Preferences -->
+            <div class="setting-group">
+                <h3><i class="fas fa-sliders-h"></i> Preferences</h3>
+                <button class="setting-item" id="languageBtn">
+                    <div class="setting-icon">
+                        <i class="fas fa-language"></i>
+                    </div>
+                    <div class="setting-info">
+                        <span class="setting-title">Language</span>
+                        <span class="setting-desc" id="currentLanguage">English</span>
+                    </div>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                <button class="setting-item" id="notificationsBtn">
+                    <div class="setting-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div class="setting-info">
+                        <span class="setting-title">Notifications</span>
+                        <span class="setting-desc">Manage notification preferences</span>
+                    </div>
+                    <div class="toggle-switch active" id="notificationsToggle">
+                        <span class="toggle-slider"></span>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Security -->
+            <div class="setting-group">
+                <h3><i class="fas fa-shield-alt"></i> Security</h3>
+                <button class="setting-item" id="changePasswordBtn">
+                    <div class="setting-icon">
+                        <i class="fas fa-key"></i>
+                    </div>
+                    <div class="setting-info">
+                        <span class="setting-title">Change Password</span>
+                        <span class="setting-desc">Update your password</span>
+                    </div>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+
+            <!-- Account -->
+            <div class="setting-group">
+                <h3><i class="fas fa-user-cog"></i> Account</h3>
+                <button class="setting-item" id="logoutBtn">
+                    <div class="setting-icon">
+                        <i class="fas fa-sign-out-alt" style="color:#ef4444;"></i>
+                    </div>
+                    <div class="setting-info">
+                        <span class="setting-title" style="color:#ef4444;">Logout</span>
+                        <span class="setting-desc">Sign out of your account</span>
+                    </div>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+                <button class="setting-item" id="deleteAccountBtn">
+                    <div class="setting-icon">
+                        <i class="fas fa-trash-alt" style="color:#ef4444;"></i>
+                    </div>
+                    <div class="setting-info">
+                        <span class="setting-title" style="color:#ef4444;">Delete Account</span>
+                        <span class="setting-desc">Permanently delete your account</span>
+                    </div>
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <div class="settings-footer">
+            <p>&copy; 2026 DVARY GAMES. All rights reserved.</p>
+            <p class="version">Version 1.0.0</p>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal" id="editProfileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-edit"></i> Edit Profile</h3>
+                <button class="modal-close" id="closeEditProfile">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editProfileForm">
+                    <div class="form-group">
+                        <label for="editFullName">Full Name</label>
+                        <input type="text" id="editFullName" placeholder="Enter your full name" />
+                    </div>
+                    <div class="form-group">
+                        <label for="editUsername">Username</label>
+                        <input type="text" id="editUsername" placeholder="Choose a username" />
+                    </div>
+                    <div class="form-group">
+                        <label for="editPhone">Phone Number</label>
+                        <input type="tel" id="editPhone" placeholder="Enter your phone number" />
+                    </div>
+                    <div id="editError" class="error-message" style="display:none;"></div>
+                    <button type="submit" class="save-btn">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div class="modal" id="changePasswordModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-key"></i> Change Password</h3>
+                <button class="modal-close" id="closePasswordModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm">
+                    <div class="form-group">
+                        <label for="currentPassword">Current Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="currentPassword" placeholder="Enter current password" />
+                            <button type="button" class="toggle-password" data-target="currentPassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">New Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="newPassword" placeholder="Enter new password (min 6 chars)" />
+                            <button type="button" class="toggle-password" data-target="newPassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmNewPassword">Confirm New Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="confirmNewPassword" placeholder="Confirm new password" />
+                            <button type="button" class="toggle-password" data-target="confirmNewPassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="passwordError" class="error-message" style="display:none;"></div>
+                    <button type="submit" class="save-btn">Update Password</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Language Modal -->
+    <div class="modal" id="languageModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-language"></i> Language</h3>
+                <button class="modal-close" id="closeLanguageModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="language-options">
+                    <button class="language-option" data-lang="en">
+                        <span class="lang-flag">🇬🇧</span>
+                        <span class="lang-name">English</span>
+                        <span class="lang-check" style="display:none;"><i class="fas fa-check"></i></span>
+                    </button>
+                    <button class="language-option" data-lang="sw">
+                        <span class="lang-flag">🇹🇿</span>
+                        <span class="lang-name">Kiswahili</span>
+                        <span class="lang-check" style="display:none;"><i class="fas fa-check"></i></span>
+                    </button>
+                    <button class="language-option" data-lang="fr">
+                        <span class="lang-flag">🇫🇷</span>
+                        <span class="lang-name">Français</span>
+                        <span class="lang-check" style="display:none;"><i class="fas fa-check"></i></span>
+                    </button>
+                    <button class="language-option" data-lang="es">
+                        <span class="lang-flag">🇪🇸</span>
+                        <span class="lang-name">Español</span>
+                        <span class="lang-check" style="display:none;"><i class="fas fa-check"></i></span>
+                    </button>
+                    <button class="language-option" data-lang="de">
+                        <span class="lang-flag">🇩🇪</span>
+                        <span class="lang-name">Deutsch</span>
+                        <span class="lang-check" style="display:none;"><i class="fas fa-check"></i></span>
+                    </button>
+                    <button class="language-option" data-lang="pt">
+                        <span class="lang-flag">🇵🇹</span>
+                        <span class="lang-name">Português</span>
+                        <span class="lang-check" style="display:none;"><i class="fas fa-check"></i></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Account Modal -->
+    <div class="modal" id="deleteAccountModal">
+        <div class="modal-content modal-danger">
+            <div class="modal-header">
+                <h3 style="color:#ef4444;"><i class="fas fa-exclamation-triangle"></i> Delete Account</h3>
+                <button class="modal-close" id="closeDeleteModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="danger-text">Are you sure you want to delete your account? This action is <strong>permanent</strong> and cannot be undone.</p>
+                <p class="danger-text">All your data including messages, profile, and game history will be lost.</p>
+                <div class="form-group">
+                    <label for="deleteConfirm">Type "DELETE" to confirm</label>
+                    <input type="text" id="deleteConfirm" placeholder="Type DELETE here" />
+                </div>
+                <div id="deleteError" class="error-message" style="display:none;"></div>
+                <button class="delete-btn" id="confirmDeleteBtn">Permanently Delete Account</button>
+                <button class="cancel-btn" id="cancelDeleteBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+                                                                                    </html>
