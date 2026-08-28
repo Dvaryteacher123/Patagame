@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DVARY GAMES - Premium Gaming Platform</title>
+    
+    <script type="importmap">
+        {
+            "imports": {
+                "firebase/app": "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js",
+                "firebase/analytics": "https://www.gstatic.com/firebasejs/10.7.0/firebase-analytics.js",
+                "firebase/auth": "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js",
+                "firebase/firestore": "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js",
+                "firebase/storage": "https://www.gstatic.com/firebasejs/10.7.0/firebase-storage.js"
+            }
+        }
+    </script>
+    
+    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+    <!-- ============================================
+    FIREBASE INITIALIZATION
+    ============================================ -->
+    <script type="module">
+        // ============================================
+        // IMPORT FIREBASE SDKs
+        // ============================================
+        import { initializeApp } from "firebase/app";
+        import { getAnalytics } from "firebase/analytics";
+        import { getAuth } from "firebase/auth";
+        import { getFirestore } from "firebase/firestore";
+        import { getStorage } from "firebase/storage";
+
+        // ============================================
+        // FIREBASE CONFIGURATION
+        // ============================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyCmwASW4XXQ3O0AvsCM_r1WLlrUmGjYVxI",
+            authDomain: "dvary-9a7d0.firebaseapp.com",
+            projectId: "dvary-9a7d0",
+            storageBucket: "dvary-9a7d0.firebasestorage.app",
+            messagingSenderId: "107370806066",
+            appId: "1:107370806066:web:4c2ce1e6f7b6c32909f52b",
+            measurementId: "G-07361LFJEP"
+        };
+
+        // ============================================
+        // INITIALIZE FIREBASE
+        // ============================================
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        console.log('🔥 Firebase initialized in index.html!');
+
+        // Expose for app.js
+        window.__firebase = { app, analytics, auth, db, storage };
+    </script>
+
+    <!-- ============================================
+    HEADER
+    ============================================ -->
+    <header class="header" id="mainHeader">
+        <div class="header-container">
+            <div class="logo">
+                <a href="index.html">
+                    <i class="fas fa-gamepad"></i>
+                    <span>DVARY</span> GAMES
+                </a>
+            </div>
+            
+            <nav class="nav-links" id="navLinks">
+                <a href="index.html" class="active"><i class="fas fa-home"></i> Home</a>
+                <a href="#games"><i class="fas fa-gamepad"></i> Games</a>
+                <a href="#vip-games"><i class="fas fa-crown"></i> VIP Games</a>
+                <a href="#free-games"><i class="fas fa-gift"></i> Free Games</a>
+                <a href="#" id="notificationLink"><i class="fas fa-bell"></i> <span class="notification-badge" id="notificationBadge">0</span></a>
+                <a href="chat.html"><i class="fas fa-comment-dots"></i> Chat</a>
+                
+                <div id="authLinks">
+                    <a href="login.html" class="btn-login"><i class="fas fa-sign-in-alt"></i> Login</a>
+                    <a href="signup.html" class="btn-signup"><i class="fas fa-user-plus"></i> Sign Up</a>
+                </div>
+                
+                <div id="userLinks" style="display: none;">
+                    <a href="setting.html" class="profile-link">
+                        <img src="" alt="Profile" id="navProfilePic" class="nav-profile-pic" />
+                        <span id="navUsername">User</span>
+                    </a>
+                    <a href="#" id="logoutBtn" class="btn-logout"><i class="fas fa-sign-out-alt"></i></a>
+                </div>
+            </nav>
+            
+            <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="index.html" class="active"><i class="fas fa-home"></i> Home</a>
+            <a href="#games"><i class="fas fa-gamepad"></i> Games</a>
+            <a href="#vip-games"><i class="fas fa-crown"></i> VIP Games</a>
+            <a href="#free-games"><i class="fas fa-gift"></i> Free Games</a>
+            <a href="chat.html"><i class="fas fa-comment-dots"></i> Chat</a>
+            <a href="setting.html"><i class="fas fa-cog"></i> Settings</a>
+            
+            <div id="mobileAuthLinks">
+                <a href="login.html" class="btn-login"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <a href="signup.html" class="btn-signup"><i class="fas fa-user-plus"></i> Sign Up</a>
+            </div>
+            
+            <div id="mobileUserLinks" style="display: none;">
+                <a href="#" id="mobileLogoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============================================
+    MAIN CONTENT
+    ============================================ -->
+    <main>
+        <!-- HERO -->
+        <section class="hero" id="heroSection">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <span class="hero-badge">🔥 HOT GAME</span>
+                    <h1 id="heroTitle">Cyberpunk 2077</h1>
+                    <p id="heroDescription">Experience the future of gaming with stunning graphics and immersive gameplay.</p>
+                    <div class="hero-meta">
+                        <span class="hero-category" id="heroCategory">Action</span>
+                        <span class="hero-rating"><i class="fas fa-star"></i> 4.8</span>
+                    </div>
+                    <a href="#" class="btn-primary hero-btn" id="heroViewBtn">
+                        <i class="fas fa-play"></i> View Game
+                    </a>
+                </div>
+                <div class="hero-image" id="heroImage">
+                    <img src="https://placehold.co/600x400/1a1a2e/ff6b35?text=DVARY+GAMES" alt="Featured Game" />
+                </div>
+            </div>
+        </section>
+
+        <!-- CATEGORIES -->
+        <section class="categories" id="categories">
+            <div class="container">
+                <h2 class="section-title"><i class="fas fa-tags"></i> Categories</h2>
+                <div class="categories-grid" id="categoriesGrid">
+                    <button class="category-btn active" data-category="all">All</button>
+                    <button class="category-btn" data-category="action"><i class="fas fa-fist-raised"></i> Action</button>
+                    <button class="category-btn" data-category="racing"><i class="fas fa-car"></i> Racing</button>
+                    <button class="category-btn" data-category="adventure"><i class="fas fa-mountain"></i> Adventure</button>
+                    <button class="category-btn" data-category="sports"><i class="fas fa-football-ball"></i> Sports</button>
+                    <button class="category-btn" data-category="simulation"><i class="fas fa-city"></i> Simulation</button>
+                    <button class="category-btn" data-category="strategy"><i class="fas fa-chess-queen"></i> Strategy</button>
+                    <button class="category-btn" data-category="fighting"><i class="fas fa-fist-raised"></i> Fighting</button>
+                    <button class="category-btn" data-category="multiplayer"><i class="fas fa-users"></i> Multiplayer</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- FEATURED GAMES -->
+        <section class="games-section" id="games">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fas fa-star"></i> Featured Games</h2>
+                    <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="games-grid" id="featuredGames"></div>
+            </div>
+        </section>
+
+        <!-- TRENDING GAMES -->
+        <section class="games-section" id="trendingGames">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fas fa-fire"></i> Trending Games</h2>
+                    <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="games-grid" id="trendingGamesGrid"></div>
+            </div>
+        </section>
+
+        <!-- VIP GAMES -->
+        <section class="games-section vip-section" id="vip-games">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fas fa-crown"></i> VIP Games</h2>
+                    <span class="vip-badge">Premium</span>
+                </div>
+                <div class="games-grid" id="vipGames"></div>
+                <div class="vip-message">
+                    <i class="fas fa-crown"></i>
+                    <p>VIP games are premium titles with exclusive content. <span>Coming soon!</span></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FREE GAMES -->
+        <section class="games-section" id="free-games">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fas fa-gift"></i> Free Games</h2>
+                    <a href="#" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="games-grid" id="freeGames"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ============================================
+    FOOTER
+    ============================================ -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <i class="fas fa-gamepad"></i>
+                        <span>DVARY</span> GAMES
+                    </div>
+                    <p>Premium gaming platform with the best games and community.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <a href="index.html">Home</a>
+                    <a href="#games">Games</a>
+                    <a href="#vip-games">VIP Games</a>
+                    <a href="#free-games">Free Games</a>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>Support</h4>
+                    <a href="#">Help Center</a>
+                    <a href="#">Contact Us</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>Account</h4>
+                    <a href="login.html">Login</a>
+                    <a href="signup.html">Sign Up</a>
+                    <a href="setting.html">Settings</a>
+                    <a href="chat.html">Chat</a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 DVARY GAMES. All rights reserved.</p>
+                <p class="footer-version">v1.0.0</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ============================================
+    NOTIFICATION TOAST
+    ============================================ -->
+    <div class="notification-toast" id="notificationToast" style="display: none;">
+        <div class="toast-content">
+            <i class="fas fa-bell"></i>
+            <div class="toast-message">
+                <strong id="toastTitle">Notification</strong>
+                <p id="toastMessage">You have a new notification!</p>
+            </div>
+            <button class="toast-close" id="toastClose"><i class="fas fa-times"></i></button>
+        </div>
+    </div>
+
+    <!-- ============================================
+    LOADING OVERLAY
+    ============================================ -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loader">
+            <div class="loader-spinner"></div>
+            <p>Loading DVARY GAMES...</p>
+        </div>
+    </div>
+
+    <!-- ============================================
+    APP.JS
+    ============================================ -->
+    <script type="module" src="../js/app.js"></script>
+
+</body>
+              </html>
