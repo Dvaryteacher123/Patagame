@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>DVARY GAMES - Sign Up</title>
+    
+    <!-- Import Firebase SDKs -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getStorage } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCmwASW4XXQ3O0AvsCM_r1WLlrUmGjYVxI",
+            authDomain: "dvary-9a7d0.firebaseapp.com",
+            projectId: "dvary-9a7d0",
+            storageBucket: "dvary-9a7d0.firebasestorage.app",
+            messagingSenderId: "107370806066",
+            appId: "1:107370806066:web:4c2ce1e6f7b6c32909f52b",
+            measurementId: "G-07361LFJEP"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        // Make Firebase available globally
+        window.auth = auth;
+        window.db = db;
+        window.storage = storage;
+
+        console.log('✅ Firebase initialized for Sign Up');
+    </script>
+
+    <link rel="stylesheet" href="signup.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+    <div class="signup-container">
+        <!-- Back Button -->
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
+
+        <!-- Sign Up Card -->
+        <div class="signup-card">
+            <div class="signup-header">
+                <div class="signup-logo">
+                    <span class="logo-icon">🎮</span>
+                    <span class="logo-text">DVARY GAMES</span>
+                </div>
+                <h2>Create Account</h2>
+                <p>Join the ultimate gaming community</p>
+            </div>
+
+            <form id="signupForm" class="signup-form">
+                <!-- Full Name -->
+                <div class="form-group">
+                    <label for="fullName">
+                        <i class="fas fa-user"></i> Full Name
+                    </label>
+                    <input 
+                        type="text" 
+                        id="fullName" 
+                        placeholder="Enter your full name" 
+                        required 
+                        autocomplete="name"
+                    />
+                </div>
+
+                <!-- Username -->
+                <div class="form-group">
+                    <label for="username">
+                        <i class="fas fa-at"></i> Username
+                    </label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        placeholder="Choose a unique username" 
+                        required 
+                        autocomplete="username"
+                    />
+                    <small class="field-hint">Username must be unique and at least 3 characters</small>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="email">
+                        <i class="fas fa-envelope"></i> Email Address
+                    </label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        placeholder="Enter your email address" 
+                        required 
+                        autocomplete="email"
+                    />
+                </div>
+
+                <!-- Phone Number -->
+                <div class="form-group">
+                    <label for="phone">
+                        <i class="fas fa-phone"></i> Phone Number
+                    </label>
+                    <input 
+                        type="tel" 
+                        id="phone" 
+                        placeholder="Enter your phone number" 
+                        required 
+                        autocomplete="tel"
+                    />
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="password">
+                        <i class="fas fa-lock"></i> Password
+                    </label>
+                    <div class="password-wrapper">
+                        <input 
+                            type="password" 
+                            id="password" 
+                            placeholder="Create a strong password (min 6 characters)" 
+                            required 
+                            autocomplete="new-password"
+                        />
+                        <button type="button" id="togglePassword" class="toggle-password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <small class="field-hint">Password must be at least 6 characters</small>
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="form-group">
+                    <label for="confirmPassword">
+                        <i class="fas fa-check-circle"></i> Confirm Password
+                    </label>
+                    <div class="password-wrapper">
+                        <input 
+                            type="password" 
+                            id="confirmPassword" 
+                            placeholder="Confirm your password" 
+                            required 
+                            autocomplete="new-password"
+                        />
+                        <button type="button" id="toggleConfirmPassword" class="toggle-password">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Profile Picture -->
+                <div class="form-group">
+                    <label for="profilePicture">
+                        <i class="fas fa-image"></i> Profile Picture
+                    </label>
+                    <div class="file-upload-wrapper">
+                        <input 
+                            type="file" 
+                            id="profilePicture" 
+                            accept="image/*"
+                            class="file-input"
+                        />
+                        <div class="file-upload-label" id="fileUploadLabel">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span>Choose a profile picture (optional)</span>
+                        </div>
+                        <div class="file-preview" id="filePreview" style="display:none;">
+                            <img id="previewImage" src="#" alt="Profile preview" />
+                            <button type="button" id="removeImage" class="remove-image">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <small class="field-hint">JPG, PNG or GIF (max 5MB)</small>
+                </div>
+
+                <!-- Terms -->
+                <div class="form-group terms-group">
+                    <label class="terms-checkbox">
+                        <input type="checkbox" id="termsCheckbox" required />
+                        <span>
+                            I agree to the 
+                            <a href="#" id="termsLink">Terms of Service</a> and 
+                            <a href="#" id="privacyLink">Privacy Policy</a>
+                        </span>
+                    </label>
+                </div>
+
+                <!-- Error Message -->
+                <div id="errorMessage" class="error-message" style="display:none;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="errorText">Error message</span>
+                </div>
+
+                <!-- Success Message -->
+                <div id="successMessage" class="success-message" style="display:none;">
+                    <i class="fas fa-check-circle"></i>
+                    <span id="successText">Account created successfully!</span>
+                </div>
+
+                <!-- Sign Up Button -->
+                <button type="submit" id="signupBtn" class="signup-btn">
+                    <span id="signupText">Create Account</span>
+                    <span id="signupSpinner" class="spinner" style="display:none;"></span>
+                </button>
+
+                <!-- Divider -->
+                <div class="divider">
+                    <span>or</span>
+                </div>
+
+                <!-- Login Link -->
+                <div class="login-link">
+                    <p>Already have an account? <a href="login.html">Login</a></p>
+                </div>
+            </form>
+        </div>
+
+        <!-- Footer -->
+        <div class="signup-footer">
+            <p>&copy; 2026 DVARY GAMES. All rights reserved.</p>
+        </div>
+    </div>
+
+    <script type="module">
+        import { getAuth, createUserWithEmailAndPassword, updateProfile, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js";
+
+        const auth = getAuth();
+        const db = getFirestore();
+        const storage = getStorage();
+
+        // ============================================
+        // DOM ELEMENTS
+        // ============================================
+        const form = document.getElementById('signupForm');
+        const fullNameInput = document.getElementById('fullName');
+        const usernameInput = document.getElementById('username');
+        const emailInput = document.getElementById('email');
+        const phoneInput = document.getElementById('phone');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const profilePictureInput = document.getElementById('profilePicture');
+        const fileUploadLabel = document.getElementById('fileUploadLabel');
+        const filePreview = document.getElementById('filePreview');
+        const previewImage = document.getElementById('previewImage');
+        const removeImage = document.getElementById('removeImage');
+        const termsCheckbox = document.getElementById('termsCheckbox');
+        const togglePassword = document.getElementById('togglePassword');
+        const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+        const signupBtn = document.getElementById('signupBtn');
+        const signupText = document.getElementById('signupText');
+        const signupSpinner = document.getElementById('signupSpinner');
+        const errorMessage = document.getElementById('errorMessage');
+        const errorText = document.getElementById('errorText');
+        const successMessage = document.getElementById('successMessage');
+        const successText = document.getElementById('successText');
+
+        let selectedFile = null;
+
+        // ============================================
+        // CHECK IF USER IS ALREADY LOGGED IN
+        // ============================================
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // Check if user exists in Firestore
+                try {
+                    const userDoc = await getDoc(doc(db, 'users', user.uid));
+                    if (userDoc.exists()) {
+                        // User is already logged in, redirect to index
+                        window.location.href = 'index.html';
+                        return;
+                    }
+                } catch (error) {
+                    console.error('Error checking user:', error);
+                }
+            }
+        });
+
+        // ============================================
+        // TOGGLE PASSWORD VISIBILITY
+        // ============================================
+        togglePassword.addEventListener('click', () => {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            togglePassword.querySelector('i').className = type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
+        });
+
+        toggleConfirmPassword.addEventListener('click', () => {
+            const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            confirmPasswordInput.setAttribute('type', type);
+            toggleConfirmPassword.querySelector('i').className = type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
+        });
+
+        // ============================================
+        // FILE UPLOAD HANDLING
+        // ============================================
+        profilePictureInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                // Check file size (max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('File is too large. Please upload an image under 5MB.');
+                    profilePictureInput.value = '';
+                    return;
+                }
+
+                // Check file type
+                if (!file.type.startsWith('image/')) {
+                    alert('Please upload an image file (JPG, PNG, or GIF).');
+                    profilePictureInput.value = '';
+                    return;
+                }
+
+                selectedFile = file;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    previewImage.src = e.target.result;
+                    filePreview.style.display = 'block';
+                    fileUploadLabel.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        removeImage.addEventListener('click', () => {
+            selectedFile = null;
+            profilePictureInput.value = '';
+            filePreview.style.display = 'none';
+            fileUploadLabel.style.display = 'flex';
+        });
+
+        // ============================================
+        // VALIDATION FUNCTIONS
+        // ============================================
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        function isValidPhone(phone) {
+            // Accepts various phone formats
+            return /^[+]?[0-9]{10,15}$/.test(phone.replace(/[\s\-()]/g, ''));
+        }
+
+        function isValidUsername(username) {
+            return username.length >= 3 && /^[a-zA-Z0-9_]+$/.test(username);
+        }
+
+        function showError(message) {
+            errorMessage.style.display = 'flex';
+            errorText.textContent = message;
+            successMessage.style.display = 'none';
+        }
+
+        function hideError() {
+            errorMessage.style.display = 'none';
+            errorText.textContent = '';
+        }
+
+        function showSuccess(message) {
+            successMessage.style.display = 'flex';
+            successText.textContent = message;
+            errorMessage.style.display = 'none';
+        }
+
+        function hideSuccess() {
+            successMessage.style.display = 'none';
+            successText.textContent = '';
+        }
+
+        function setLoading(loading) {
+            if (loading) {
+                signupBtn.disabled = true;
+                signupText.textContent = 'Creating account...';
+                signupSpinner.style.display = 'inline-block';
+            } else {
+                signupBtn.disabled = false;
+                signupText.textContent = 'Create Account';
+                signupSpinner.style.display = 'none';
+            }
+        }
+
+        // ============================================
+        // SIGNUP FORM SUBMIT
+        // ============================================
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Clear previous messages
+            hideError();
+            hideSuccess();
+
+            // Get values
+            const fullName = fullNameInput.value.trim();
+            const username = usernameInput.value.trim();
+            const email = emailInput.value.trim();
+            const phone = phoneInput.value.trim();
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+
+            // ============================================
+            // VALIDATION
+            // ============================================
+
+            // Full Name validation
+            if (!fullName) {
+                showError('Please enter your full name');
+                fullNameInput.focus();
+                return;
+            }
+
+            if (fullName.length < 2) {
+                showError('Full name must be at least 2 characters');
+                fullNameInput.focus();
+                return;
+            }
+
+            // Username validation
+            if (!username) {
+                showError('Please choose a username');
+                usernameInput.focus();
+                return;
+            }
+
+            if (!isValidUsername(username)) {
+                showError('Username must be at least 3 characters and contain only letters, numbers, and underscores');
+                usernameInput.focus();
+                return;
+            }
+
+            // Email validation
+            if (!email) {
+                showError('Please enter your email address');
+                emailInput.focus();
+                return;
+            }
+
+            if (!isValidEmail(email)) {
+                showError('Please enter a valid email address');
+                emailInput.focus();
+                return;
+            }
+
+            // Phone validation
+            if (!phone) {
+                showError('Please enter your phone number');
+                phoneInput.focus();
+                return;
+            }
+
+            if (!isValidPhone(phone)) {
+                showError('Please enter a valid phone number (e.g., +255700000000)');
+                phoneInput.focus();
+                return;
+            }
+
+            // Password validation
+            if (!password) {
+                showError('Please create a password');
+                passwordInput.focus();
+                return;
+            }
+
+            if (password.length < 6) {
+                showError('Password must be at least 6 characters');
+                passwordInput.focus();
+                return;
+            }
+
+            // Confirm password validation
+            if (!confirmPassword) {
+                showError('Please confirm your password');
+                confirmPasswordInput.focus();
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showError('Passwords do not match');
+                confirmPasswordInput.focus();
+                return;
+            }
+
+            // Terms validation
+            if (!termsCheckbox.checked) {
+                showError('Please agree to the Terms of Service and Privacy Policy');
+                termsCheckbox.focus();
+                return;
+            }
+
+            // ============================================
+            // CHECK IF USERNAME OR EMAIL EXISTS
+            // ============================================
+            setLoading(true);
+
+            try {
+                // Check if username exists
+                const usernameQuery = query(collection(db, 'users'), where('username', '==', username));
+                const usernameSnapshot = await getDocs(usernameQuery);
+                
+                if (!usernameSnapshot.empty) {
+                    showError('Username already taken. Please choose another one.');
+                    usernameInput.focus();
+                    setLoading(false);
+                    return;
+                }
+
+                // Check if email exists
+                const emailQuery = query(collection(db, 'users'), where('email', '==', email));
+                const emailSnapshot = await getDocs(emailQuery);
+                
+                if (!emailSnapshot.empty) {
+                    showError('Email already registered. Please use a different email.');
+                    emailInput.focus();
+                    setLoading(false);
+                    return;
+                }
+
+                // ============================================
+                // CREATE USER WITH FIREBASE AUTH
+                // ============================================
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // Upload profile picture if selected
+                let profileImage = `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=7c3aed&color=fff&size=128`;
+
+                if (selectedFile) {
+                    try {
+                        const storageRef = ref(storage, `profile/${user.uid}/${selectedFile.name}`);
+                        await uploadBytes(storageRef, selectedFile);
+                        profileImage = await getDownloadURL(storageRef);
+                    } catch (uploadError) {
+                        console.error('Error uploading profile picture:', uploadError);
+                        // Continue with default avatar
+                    }
+                }
+
+                // ============================================
+                // SAVE USER TO FIRESTORE
+                // ============================================
+                const userData = {
+                    fullName,
+                    username,
+                    email,
+                    phone,
+                    profileImage,
+                    onlineStatus: true,
+                    lastSeen: new Date().toISOString(),
+                    role: 'user',
+                    createdAt: new Date().toISOString(),
+                    isActive: true,
+                    uid: user.uid
+                };
+
+                await setDoc(doc(db, 'users', user.uid), userData);
+
+                // Update auth profile
+                try {
+                    await updateProfile(user, {
+                        displayName: fullName,
+                        photoURL: profileImage
+                    });
+                } catch (profileError) {
+                    console.error('Error updating profile:', profileError);
+                }
+
+                // ============================================
+                // SUCCESS
+                // ============================================
+                showSuccess('Account created successfully! Redirecting...');
+                
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+
+            } catch (error) {
+                console.error('Signup error:', error);
+                
+                let message = 'Account creation failed. Please try again.';
+                
+                switch (error.code) {
+                    case 'auth/email-already-in-use':
+                        message = 'This email is already registered. Please login.';
+                        break;
+                    case 'auth/invalid-email':
+                        message = 'Invalid email format.';
+                        break;
+                    case 'auth/weak-password':
+                        message = 'Password is too weak. Please use at least 6 characters.';
+                        break;
+                    case 'auth/network-request-failed':
+                        message = 'Network error. Check your internet connection.';
+                        break;
+                    case 'auth/too-many-requests':
+                        message = 'Too many attempts. Please try again later.';
+                        break;
+                    default:
+                        message = error.message || 'Account creation failed. Please try again.';
+                }
+                
+                showError(message);
+                setLoading(false);
+            }
+        });
+
+        // ============================================
+        // LIVE VALIDATION
+        // ============================================
+        usernameInput.addEventListener('blur', async () => {
+            const username = usernameInput.value.trim();
+            if (username.length >= 3 && isValidUsername(username)) {
+                try {
+                    const usernameQuery = query(collection(db, 'users'), where('username', '==', username));
+                    const snapshot = await getDocs(usernameQuery);
+                    if (!snapshot.empty) {
+                        showError('Username already taken');
+                        usernameInput.style.borderColor = '#ef4444';
+                    } else {
+                        hideError();
+                        usernameInput.style.borderColor = '#10b981';
+                    }
+                } catch (error) {
+                    console.error('Error checking username:', error);
+                }
+            }
+        });
+
+        passwordInput.addEventListener('input', () => {
+            const password = passwordInput.value;
+            if (password.length > 0 && password.length < 6) {
+                passwordInput.style.borderColor = '#f59e0b';
+            } else if (password.length >= 6) {
+                passwordInput.style.borderColor = '#10b981';
+            } else {
+                passwordInput.style.borderColor = '';
+            }
+        });
+
+        confirmPasswordInput.addEventListener('input', () => {
+            const password = passwordInput.value;
+            const confirm = confirmPasswordInput.value;
+            if (confirm.length > 0 && password !== confirm) {
+                confirmPasswordInput.style.borderColor = '#ef4444';
+            } else if (confirm.length > 0 && password === confirm) {
+                confirmPasswordInput.style.borderColor = '#10b981';
+            } else {
+                confirmPasswordInput.style.borderColor = '';
+            }
+        });
+
+        // ============================================
+        // KEYBOARD SHORTCUTS
+        // ============================================
+        document.addEventListener('keydown', (e) => {
+            // Enter key moves to next field
+            if (e.key === 'Enter') {
+                const active = document.activeElement;
+                const inputs = form.querySelectorAll('input:not([type="file"])');
+                const index = Array.from(inputs).indexOf(active);
+                if (index !== -1 && index < inputs.length - 1) {
+                    e.preventDefault();
+                    inputs[index + 1].focus();
+                }
+            }
+        });
+
+        console.log('✅ Signup page loaded successfully');
+    </script>
+</body>
+</html>
